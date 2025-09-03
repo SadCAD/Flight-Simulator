@@ -16,37 +16,44 @@ Rail_Length = 0 #effective rail length (m)
 On_Rail = True
 
 #data handling
-RasAero_Flight_Data = pandas.read_csv("Input_files/Flight Test.csv")
-RasAero_Aero_Data = pandas.read_csv("Input_files/CD Test.csv")
-Air_Data = pandas.read_csv("Input_files/Air_Data.csv")
+RasAero_Flight_Data = pandas.read_csv("Input_files/Flight Test.CSV")
+RasAero_Aero_Data = pandas.read_csv("Input_files/CD Test.CSV")
+Air_Data = pandas.read_csv("Input_files/Air Data.CSV")
 Thrust_Data = [(RasAero_Flight_Data['Time (sec)'].values), (RasAero_Flight_Data['Thrust (lb)'].values)*4.44822]
-Flight_Data = [] #a place to store flight data as it is generated
+#Flight_Data = [] #a place to store flight data as it is generated
 #Headers = ['Time (s)', 'Position North (m)', 'Position East (m)', 'Height AGL (m)', 'Distance From Pad (m)', 'Direction Vector North', 'Direction Vector East', 'Direction Vector Up']
 
 #auto setup variables
-Time = 0 #(s)
-Position = [0, 0, 0] #East, North, Up (m)
-Direction = [math.sin(math.radians(Rail_Direction))*math.sin(math.radians(Rail_Angle)), math.cos(math.radians(Rail_Direction))*math.sin(math.radians(Rail_Angle)), math.cos(math.radians(Rail_Angle))]#unit vector showing rocket direction East, North, Up (unitless)
-Angle = [math.acos(Direction[0]), math.acos(Direction[1]), math.acos(Direction[2])]
-Velocity = [0, 0, 0] #East, North, Up (m/s)
-Angular_Velocity = [0, 0, 0]
-Acceleration = [0, 0, 0] #East, North, Up (m/s/s)
-Angular_Acceleration = [0, 0, 0]
- 
-Flight_Data = []
+Time = ['Time (s)', 0] #(s)
+Position = [['Position East [m]', 'Position North [m]', 'Position Verical [m]'], [0, 0, 0]] #East, North, Vertical. relative to launch site (m)
+Direction = [['Direction East Component', 'Direction North Component', 'Direction Vertical Component'], [math.sin(math.radians(Rail_Direction))*math.sin(math.radians(Rail_Angle)), math.cos(math.radians(Rail_Direction))*math.sin(math.radians(Rail_Angle)), math.cos(math.radians(Rail_Angle))]]#unit vector showing rocket direction East, North, Up (unitless)
+Direction_Rad = [['Direction East [Rad]', 'Direction North [Rad]', 'Direction Vertical [Rad]'], [math.acos(Direction[-1][0]), math.acos(Direction[-1][1]), math.acos(Direction[-1][2])]]#direction given in rad
+Ground_Speed_Velocity = [['Ground Speed Velocity East [m/s]', 'Ground Speed Velocity North [m/s]', 'Ground Speed Velocity Verical [m/s]'], [0, 0, 0]] #Ground Speed East, North, Up (m/s)
+#Air_Speed_Velocity = [['Air Speed Velocity East [m/s]', 'Air Speed Velocity North [m/s]', 'Air Speed Velocity Verical [m/s]'], [Ground_Speed_Velocity[-1][0] + numpy.interp(Position[-1][2], Air_Data[0], Air_Data[2])]]#, Ground_Speed_Velocity[-1][1] + numpy.interp(Position[-1][2], Air_Data[0], Air_Data[1]), Ground_Speed_Velocity[-1][2]]] #Air Speed East, North, Up (m/s) https://www.grc.nasa.gov/www/k-12/airplane/move2.html
+#Air_Speed_Velocity = [['Air Speed Velocity East [m/s]', 'Air Speed Velocity North [m/s]', 'Air Speed Velocity Verical [m/s]'], [Ground_Speed_Velocity[-1][0] + numpy.interp(Position[-1][2], Air_Data[0], Air_Data[2])]]#Air Speed East, North, Up (m/s) https://www.grc.nasa.gov/www/k-12/airplane/move2.html
+Angular_Velocity = [['Angular Velocity East [Rad/s]', 'Angular Velocity North [Rad/s]', 'Angular Velocity Verical [Rad/s]'], [0, 0, 0]] #East, North, Up (Rad/s)
+Acceleration = [['Acceleration East [m/s/s]', 'Acceleration North [m/s/s]', 'Acceleration Verical [m/s/s]'], [0, 0, 0]] #East, North, Up (m/s/s) (using change in ground speed/time)
+Angular_Acceleration = [['Angular Acceleration East [Rad/s/s]', 'Angular Acceleration North [Rad/s/s]', 'Angular Acceleration Verical [Rad/s/s]'], [0, 0, 0]] #East, North, Up (Rad/s/s)
+
+print(Ground_Speed_Velocity[-1][0])
+print(Position[-1][2])
+#print(Air_Data[0])
+#print(Air_Data[2])
+#print(numpy.interp(Position[-1][2], Air_Data[0], Air_Data[2]))
 
 #Functions
-def Thrust_at_Time(t):
-    return numpy.interp(t, Thrust_Data[0], Thrust_Data[1])
+def Thrust_at_Time(t):#time
+    return numpy.interp(t, Thrust_Data[0], Thrust_Data[1])#returns thrust in newtons
 
+Flight_Data = [Time, Position]
 
-while(Position_Height_AGL >= 0){
-    Time = Time+Timestep
-    
-    if(On_Rail){
-        
-    }
-}
+#while(Position_Height_AGL >= 0){
+#    Time = Time+Timestep
+#    
+#    if(On_Rail){
+#        
+#    }
+#}
 
 with open('Simulated Flight Data.csv', 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)

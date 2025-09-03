@@ -73,6 +73,6 @@ for item in Windy_Values:
 
     Air_Data.append([item[0], item[1]*math.cos(math.radians(item[2]))/3.6, item[1]*math.sin(math.radians(item[2]))/3.6, Air_Density])
 
-with open('Input_Files/Air_Data.csv', mode='w', newline='') as file:
+with open('Input_Files/Air Data.CSV', mode='w', newline='') as file:
     writer = csv.writer(file)
     writer.writerows(Air_Data)

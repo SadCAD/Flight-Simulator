@@ -29,17 +29,10 @@ Position = [['Position East [m]', 'Position North [m]', 'Position Verical [m]'],
 Direction = [['Direction East Component', 'Direction North Component', 'Direction Vertical Component'], [math.sin(math.radians(Rail_Direction))*math.sin(math.radians(Rail_Angle)), math.cos(math.radians(Rail_Direction))*math.sin(math.radians(Rail_Angle)), math.cos(math.radians(Rail_Angle))]]#unit vector showing rocket direction East, North, Up (unitless)
 Direction_Rad = [['Direction East [Rad]', 'Direction North [Rad]', 'Direction Vertical [Rad]'], [math.acos(Direction[-1][0]), math.acos(Direction[-1][1]), math.acos(Direction[-1][2])]]#direction given in rad
 Ground_Speed_Velocity = [['Ground Speed Velocity East [m/s]', 'Ground Speed Velocity North [m/s]', 'Ground Speed Velocity Verical [m/s]'], [0, 0, 0]] #Ground Speed East, North, Up (m/s)
-#Air_Speed_Velocity = [['Air Speed Velocity East [m/s]', 'Air Speed Velocity North [m/s]', 'Air Speed Velocity Verical [m/s]'], [Ground_Speed_Velocity[-1][0] + numpy.interp(Position[-1][2], Air_Data[0], Air_Data[2])]]#, Ground_Speed_Velocity[-1][1] + numpy.interp(Position[-1][2], Air_Data[0], Air_Data[1]), Ground_Speed_Velocity[-1][2]]] #Air Speed East, North, Up (m/s) https://www.grc.nasa.gov/www/k-12/airplane/move2.html
-#Air_Speed_Velocity = [['Air Speed Velocity East [m/s]', 'Air Speed Velocity North [m/s]', 'Air Speed Velocity Verical [m/s]'], [Ground_Speed_Velocity[-1][0] + numpy.interp(Position[-1][2], Air_Data[0], Air_Data[2])]]#Air Speed East, North, Up (m/s) https://www.grc.nasa.gov/www/k-12/airplane/move2.html
+Air_Speed_Velocity = [['Air Speed Velocity East [m/s]', 'Air Speed Velocity North [m/s]', 'Air Speed Velocity Verical [m/s]'], [Ground_Speed_Velocity[-1][0] + numpy.interp(Position[-1][2], Air_Data['Elevation AGL (m)'], Air_Data['Wind East (m/s)'])], Ground_Speed_Velocity[-1][1] + numpy.interp(Position[-1][2], Air_Data['Elevation AGL (m)'], Air_Data['Wind North (m/s)']), Ground_Speed_Velocity[-1][2]] #Air Speed East, North, Up (m/s) https://www.grc.nasa.gov/www/k-12/airplane/move2.html
 Angular_Velocity = [['Angular Velocity East [Rad/s]', 'Angular Velocity North [Rad/s]', 'Angular Velocity Verical [Rad/s]'], [0, 0, 0]] #East, North, Up (Rad/s)
 Acceleration = [['Acceleration East [m/s/s]', 'Acceleration North [m/s/s]', 'Acceleration Verical [m/s/s]'], [0, 0, 0]] #East, North, Up (m/s/s) (using change in ground speed/time)
 Angular_Acceleration = [['Angular Acceleration East [Rad/s/s]', 'Angular Acceleration North [Rad/s/s]', 'Angular Acceleration Verical [Rad/s/s]'], [0, 0, 0]] #East, North, Up (Rad/s/s)
-
-print(Ground_Speed_Velocity[-1][0])
-print(Position[-1][2])
-#print(Air_Data[0])
-#print(Air_Data[2])
-#print(numpy.interp(Position[-1][2], Air_Data[0], Air_Data[2]))
 
 #Functions
 def Thrust_at_Time(t):#time
